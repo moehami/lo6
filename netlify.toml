@@ -2,7 +2,7 @@
   NODE_VERSION = "20.17.0"
   NEXT_VERBOSE = "true"
   [build]
-  command = "npm run build"
+  command = "yarn build:netlify"
   publish = "/out"
   base = "/"
 
