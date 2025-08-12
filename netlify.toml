@@ -3,7 +3,7 @@
   NEXT_VERBOSE = "true"
   [dev]
   command = "yarn dev:netlify"
+
   [build]
-  command = "yarn build:netlify"
-  publish = "/out"
-  base = "/"
+  command = "npm run build"
+  publish = "out"
