@@ -61,7 +61,7 @@ jobs:
       # 🔹 Push schema if exists (keeps Tina Cloud in sync)
       - name: Push TinaCMS schema
         if: env.missing == 'false'
-        run: npx tinacms schema:push --branch ${{ env.branch }}
+        run: npx tinacms schema:push
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
