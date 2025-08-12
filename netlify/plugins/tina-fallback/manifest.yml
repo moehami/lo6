@@ -1,3 +1,3 @@
 name: tina-fallback
-version: 1.0.0
+version: "0.2.0"  // Ensure version is enclosed in quotes if it is a string
 description: Fallback plugin for TinaCMS on Netlify
