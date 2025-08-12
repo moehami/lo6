@@ -1,1 +1,3 @@
-
+name: tina-fallback
+version: 1.0.0
+description: Fallback plugin for TinaCMS on Netlify
