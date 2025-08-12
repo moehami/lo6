@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   darkMode: ['class'],
+  mode: 'jit', 
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -22,6 +23,8 @@ const config: Config = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        golden: '#FFB929', 
+        
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -85,6 +88,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'), 
+    require('@tailwindcss/typography'),
+  ],
+
 };
 export default config;

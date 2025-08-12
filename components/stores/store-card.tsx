@@ -49,10 +49,11 @@ export function Store({
             src={image}
             alt={name}
             fill
+            priority 
             className="object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
-        <CardHeader className="p-4">
+        <CardHeader className="p-2">
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-semibold text-lg">
@@ -78,7 +79,7 @@ export function Store({
             </motion.div>
           </div>
         </CardHeader>
-        <CardContent className="p-4 pt-0">
+        <CardContent className="p-3 pt-0">
           <p className="text-sm text-muted-foreground flex items-center">
             <Map className="h-4 w-4 mr-1" />
             {address}
@@ -94,8 +95,8 @@ export function Store({
             Status: {status}
           </p>
           <div className="flex gap-2 mt-2">
-            {tags.map((tag, index) => (
-              <motion.span
+              {tags?.map((tag, index) => (
+<motion.span
                 key={tag}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}

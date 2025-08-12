@@ -1,0 +1,22 @@
+# For all user-agents
+User-agent: *
+Allow: /
+Disallow: /_next/static/ # 
+Disallow: /api/ # 
+Disallow: /admin/ # 
+Disallow: /tinacms/ # 
+Disallow: /temp/ #   
+Disallow: /test/ # 
+
+# Specific directives for Bingbot (if you want to control its crawl rate)
+User-agent: Bingbot
+Crawl-delay: 10 # Wait 10 seconds between requests for Bingbot
+
+# Other specific user-agents if needed (e.g., Baiduspider)
+# User-agent: Baiduspider
+# Crawl-delay: 5
+
+# Point to your sitemaps (Crucial for SEO!)
+Sitemap: https://www.lobinstore.com/sitemap.xml
+# If you have multiple sitemaps 
+Sitemap: https://www.lobinstore.com/sitemap-0.xml
