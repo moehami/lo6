@@ -2,7 +2,8 @@
   NODE_VERSION = "20.17.0"
   NEXT_VERBOSE = "true"
   [build]
-  command = "npm run build"
+
+  command = "yarn tinacms build && yarn next build && yarn next build && yarn next-sitemap"
   publish = "/out"
   base = "/"
 
