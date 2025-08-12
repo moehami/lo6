@@ -1,11 +1,9 @@
 [build.environment]
   NODE_VERSION = "20.17.0"
   NEXT_VERBOSE = "true"
+  [dev]
+  command = "yarn dev:netlify"
   [build]
   command = "yarn build:netlify"
   publish = "/out"
   base = "/"
-
-
-[[plugins]]
-  package = "./netlify/plugins/tina-fallback"
