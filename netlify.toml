@@ -1,5 +1,5 @@
 [build.environment]
-  NODE_VERSION = "20.17.0"
+  NODE_VERSION = "20.18.0"
   NEXT_VERBOSE = "true"
   [dev]
   command = "yarn dev:netlify"
