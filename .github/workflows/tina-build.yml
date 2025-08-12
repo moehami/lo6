@@ -19,16 +19,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install 
+
         
+          
       - name: Dev TinaCMS schema 
         run: yarn tinadev
+         env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
         
       - name: Build TinaCMS schema (local mode fallback)
         run: yarn tinabuild
+         env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Commit generated files
         run: |
@@ -37,3 +44,6 @@ jobs:
           git add .tina __generated__ || true
           git commit -m "chore: update TinaCMS generated files" || echo "No changes to commit"
           git push
+           env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
