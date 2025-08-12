@@ -1,4 +1,4 @@
-name: Dev and Build TinaCMS Schema
+name: Build TinaCMS Schema
 
 on:
   push:
@@ -24,8 +24,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
         
-      - name: Dev TinaCMS schema 
-        run: yarn tinadev
         
       - name: Build TinaCMS schema (local mode fallback)
         run: yarn tinabuild
