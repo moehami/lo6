@@ -1,9 +1,12 @@
-name: Build TinaCMS Schema
+name: Build & Sync TinaCMS Schema
 
 on:
   push:
     branches:
       - main
+      - develop
+      - staging
+      - preview/*
 
 jobs:
   build-tina:
@@ -23,9 +26,42 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      # 🔹 NEW: Run backend init to ensure schema exists
+      # 🔹 Detect branch name
+      - name: Get branch name
+        id: branch
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          echo "branch=$BRANCH_NAME" >> $GITHUB_ENV
+
+      # 🔹 Check TinaCMS GraphQL schema status
+      - name: Check if TinaCMS schema exists
+        id: check-schema
+        run: |
+          echo "Checking schema for branch: ${{ env.branch }}"
+          STATUS=$(curl -s -H "X-API-KEY: ${{ secrets.TINA_TOKEN }}" \
+            "https://content.tinajs.io/content/${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}/graphql?branch=${{ env.branch }}" \
+            -o /dev/null -w "%{http_code}")
+
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Schema missing"
+            echo "missing=true" >> $GITHUB_ENV
+          else
+            echo "Schema exists"
+            echo "missing=false" >> $GITHUB_ENV
+          fi
+
+      # 🔹 Init schema if missing
       - name: Run TinaCMS backend init
-        run: npx tinacms init backend
+        if: env.missing == 'true'
+        run: npx tinacms init --branch ${{ env.branch }}
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
+      # 🔹 Push schema if exists (keeps Tina Cloud in sync)
+      - name: Push TinaCMS schema
+        if: env.missing == 'false'
+        run: npx tinacms schema:push --branch ${{ env.branch }}
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
@@ -36,7 +72,11 @@ jobs:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
-
+      - name: Build TinaCMS schema
+        run: yarn tinabuild
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Commit generated files
         run: |
