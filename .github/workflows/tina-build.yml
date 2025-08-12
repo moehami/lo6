@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -21,14 +21,27 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: yarn install 
+        run: yarn install
 
-      - name: Dev TinaCMS schema 
-        run: yarn tinacms build && next build && next-sitemap
+      - name: Build TinaCMS schema (remote mode, fallback to local mode)
+        run: |
+          echo "Attempting TinaCMS remote build..."
+          if ! yarn tinacms build; then
+            echo "⚠️ Remote GraphQL schema not found. Falling back to local mode..."
+            TINACMS_REMOTE=false yarn tinacms build
+          fi
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
-      
+
+      - name: Build Next.js & sitemap
+        run: |
+          yarn next build
+          yarn next-sitemap
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
       - name: Commit generated files
         run: |
           git config user.name "GitHub Actions"
