@@ -2,12 +2,12 @@
   "name": "lobinstores",
   "version": "0.2.0",
   "private": true,
-  "scripts": {
-    "dev": "yarn tinacms dev -c \"next dev\"",
-    "build": "yarn tinacms build && next build && next-sitemap",
-    "start": "next start",
-    "lint": "next lint"
-  },
+"scripts": {
+  "dev": "next dev",
+  "tinabuild": "tinacms build",
+  "build": "next build && next-sitemap",
+  "build:netlify": "node scripts/netlify-tina-fallback.js && yarn build"
+},
   "dependencies": {
     "@emotion/is-prop-valid": "1.3.1",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
