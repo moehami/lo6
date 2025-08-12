@@ -23,12 +23,22 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build TinaCMS schema (remote mode, fallback to local mode)
+      - name: Build TinaCMS schema (remote with conditional local fallback)
         run: |
           echo "Attempting TinaCMS remote build..."
-          if ! yarn tinacms build; then
-            echo "⚠️ Remote GraphQL schema not found. Falling back to local mode..."
+          set +e
+          OUTPUT=$(yarn tinacms build 2>&1)
+          EXIT_CODE=$?
+          set -e
+
+          echo "$OUTPUT"
+
+          if [ $EXIT_CODE -ne 0 ] && echo "$OUTPUT" | grep -q "The remote GraphQL schema does not exist"; then
+            echo "⚠️ Remote GraphQL schema missing — falling back to local mode..."
             TINACMS_REMOTE=false yarn tinacms build
+          elif [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ TinaCMS build failed due to a different error."
+            exit $EXIT_CODE
           fi
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
