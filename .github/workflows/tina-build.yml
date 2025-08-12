@@ -25,7 +25,7 @@ jobs:
 
       # 🔹 NEW: Run backend init to ensure schema exists
       - name: Run TinaCMS backend init
-        run: npx tinacms init
+        run: npx tinacms init backend
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
@@ -36,11 +36,7 @@ jobs:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
-      - name: Build TinaCMS schema (local mode fallback)
-        run: yarn tinabuild
-        env:
-          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
 
       - name: Commit generated files
         run: |
