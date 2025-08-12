@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -22,17 +22,22 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        
-      - name: Build TinaCMS schema (local mode)
-        run: TINACMS_REMOTE=false yarn tinacms build
-        env:
-             NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-             TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
-      - name: Build Next.js & sitemap
-        run: |
-          yarn next build
-          yarn next-sitemap
+      # 🔹 NEW: Run backend init to ensure schema exists
+      - name: Run TinaCMS backend init
+        run: npx tinacms init
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
+      - name: Dev TinaCMS schema 
+        run: yarn tinadev
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
+      - name: Build TinaCMS schema (local mode fallback)
+        run: yarn tinabuild
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
