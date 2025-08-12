@@ -7,4 +7,5 @@
   base = "/"
 
 
-
+[[plugins]]
+  package = "./netlify/plugins/tina-fallback"
